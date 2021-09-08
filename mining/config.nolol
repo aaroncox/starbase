@@ -1,0 +1,12 @@
+// Values that typically come from a memory chip, and are included here for testing.
+
+// System Activated?
+:GO=1 
+// Target Aquired?
+:T=0 
+// Starting Pitch (Y)
+:SP=0
+// Starting Rotation (X)
+:SR=0
+// Maximum grid size (6 creates -6,-6 to 6,6 grid)
+:MS=6

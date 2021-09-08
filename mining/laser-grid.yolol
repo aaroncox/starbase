@@ -1,0 +1,8 @@
+a=1 if:SI thena=:SI end b=:SR c=:SP :TBR=b :TBP=c d=0 e=0 f=0 g=-1
+h=:MS*-1 i=:MS j=:MS*-1 k=:MS
+ifnot :GO thengoto1end
+if:T>0thengoto4end l=-e m=1-e ifd==e thenn=f f=g*-1 g=n goto7end
+ifd<0 and d==l theno=f f=g*-1 g=o goto7end
+ifd>0 and d==m thenp=f f=g*-1 g=p end
+d=d+f e=e+g q=b+d r=c+e :TBR=b+d*a :TBP=c+e*a
+ifr==h and q==k thengoto1end ifnot :GO thengoto1end goto3

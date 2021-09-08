@@ -1,0 +1,82 @@
+// Script to move a turret in a spiral search pattern on an X/Y grid
+// For testing, uncomment to include config.nolol to emulate a memory chip:
+// include "config.nolol"
+
+// macro to flip the x/y direction of the search
+macro flip()<direction_x, direction_y> block
+    temp = direction_x
+    direction_x = direction_y * -1
+    direction_y = temp
+end
+
+// Reset position for when system is disabled
+reset> 
+
+// Set pitch/rotation increment per coordinate pair
+increment = 1
+if :SI then increment = :SI end
+
+// Determine starting position based on min/max
+start_x = :SR
+start_y = :SP
+
+// Set turret to original position
+:TBR = start_x 
+:TBP = start_y 
+
+// Initial virtual position
+virtual_x = 0
+virtual_y = 0
+
+// Initial direction headings
+direction_x = 0 
+direction_y = -1 
+
+// Determine min/max values
+min_pitch = :MS * -1
+max_pitch = :MS
+min_rotation = :MS * -1
+max_rotation = :MS
+
+while :GO do
+    // Start of the loop
+    start>
+
+    // If a target is detected, wait until gone
+    if :T > 0 then
+        goto start
+    end
+
+    // Determine if the direction of the search needs to change
+    t1 = -virtual_y
+    t2 = 1 - virtual_y
+    if virtual_x == virtual_y then 
+        flip()
+    else if virtual_x < 0 and virtual_x == t1 then
+        flip()
+    else if virtual_x > 0 and virtual_x == t2 then 
+        flip()
+    end 
+
+    // Determine the next virtual x, y position 
+    virtual_x = virtual_x + direction_x 
+    virtual_y = virtual_y + direction_y 
+
+    // Adjust grid position to start positions
+    next_turret_rotation = start_x + virtual_x
+    next_turret_pitch = start_y + virtual_y
+
+    // Update device rotation and pitch based on x, y position
+    :TBR = start_x + virtual_x * increment
+    :TBP = start_y + virtual_y * increment
+
+    // If we reached our maximum size, reset and continue searching
+    if next_turret_pitch == min_pitch and next_turret_rotation == max_rotation then
+        goto reset
+    end
+
+    // If the system has deactivated, reset.
+    if not :GO then goto reset end
+end
+
+goto reset

@@ -1,0 +1,37 @@
+// Script to validate laser position and activate when target is detected
+// For testing, uncomment to include config.nolol to emulate a memory chip:
+// include "config.nolol"
+
+start>
+
+// Set pitch/rotation increment per coordinate pair
+increment = 1
+if :SI then increment = :SI end
+
+// Determine starting position based on min/max
+start_x = :SR
+start_y = :SP
+
+// Determine min/max values
+min_pitch = start_y + :MS * increment * -1
+max_pitch = start_y + :MS * increment 
+min_rotation = start_x + :MS * increment  * -1
+max_rotation = start_x + :MS * increment 
+
+// Determine if a target is found
+target = :RFSL * :Mine - :R
+
+// Check the pitch and rotation to ensure we're in our valid range
+valid_pitch = 1
+valid_rotation = 1
+if :TBR > max_rotation or :TBR < min_rotation then
+    valid_rotation = 0
+end
+if :TBP > max_pitch or :TBP < min_pitch then
+    valid_pitch = 0
+end
+
+// If its a valid position and target is found, fire lasers
+if valid_pitch and valid_rotation and target > 0 then :T = 1 else :T = 0 end 
+
+goto start

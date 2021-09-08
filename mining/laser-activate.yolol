@@ -1,0 +1,4 @@
+a=1 if:SI thena=:SI end b=:SR c=:SP d=c+:MS*a*-1 e=c+:MS*a
+f=b+:MS*a*-1 g=b+:MS*a h=:RFSL*:Mine-:R i=1 j=1
+if:TBR>g or :TBR<f thenj=0end if:TBP>e or :TBP<d theni=0end
+ifi and j and h>0then:T=1else:T=0end goto1
